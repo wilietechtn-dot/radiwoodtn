@@ -118,6 +118,7 @@ function formatRelativeDate(dateStr?: string | Date): string {
 export default function AdminDashboard() {
   const [query, setQuery] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [currentMonthLabel, setCurrentMonthLabel] = useState("—");
 
   const [products, setProducts] = useState<ProductDB[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -127,6 +128,12 @@ export default function AdminDashboard() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setQuery(params.get("q") ?? "");
+
+    const label = new Intl.DateTimeFormat("fr-FR", {
+      month: "long",
+      year: "numeric",
+    }).format(new Date());
+    setCurrentMonthLabel(label.charAt(0).toUpperCase() + label.slice(1));
   }, []);
 
   useEffect(() => {
@@ -185,15 +192,6 @@ export default function AdminDashboard() {
     return () => {
       active = false;
     };
-  }, []);
-
-  const currentMonthLabel = useMemo(() => {
-    const label = new Intl.DateTimeFormat("fr-FR", {
-      month: "long",
-      year: "numeric",
-    }).format(new Date());
-
-    return label.charAt(0).toUpperCase() + label.slice(1);
   }, []);
 
   const unreadMessagesCount = messages.filter((m) => !m.isRead).length;

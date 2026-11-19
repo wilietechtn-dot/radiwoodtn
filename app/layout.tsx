@@ -1,9 +1,9 @@
-
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
 
 import SiteChrome from "@/components/SiteChrome";
+import { CartProvider } from "@/components/CartProvider";
 
 export const metadata: Metadata = {
   title: "RadiWood — Bois d'Olivier",
@@ -19,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <SiteChrome>{children}</SiteChrome>
+        <CartProvider>
+          <SiteChrome>{children}</SiteChrome>
+        </CartProvider>
       </body>
     </html>
   );

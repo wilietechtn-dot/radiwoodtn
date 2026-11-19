@@ -1,13 +1,9 @@
-
 export type Category = {
   id: string;
   name: string;
   description: string;
   image: string;
 };
-
-export const CATEGORY_STORAGE_KEY =
-  "radiwood_admin_categories";
 
 export const defaultCategories: Category[] = [
   {
@@ -41,50 +37,3 @@ export const defaultCategories: Category[] = [
     image: "/images/table.jpg",
   },
 ];
-
-export function getCategories(): Category[] {
-  if (typeof window === "undefined") {
-    return defaultCategories;
-  }
-
-  try {
-    const saved = localStorage.getItem(
-      CATEGORY_STORAGE_KEY
-    );
-
-    if (saved === null) {
-      return defaultCategories;
-    }
-
-    const parsed: unknown = JSON.parse(saved);
-
-    if (!Array.isArray(parsed)) {
-      return defaultCategories;
-    }
-
-    return parsed.filter(
-      (item): item is Category =>
-        item !== null &&
-        typeof item === "object" &&
-        typeof item.id === "string" &&
-        typeof item.name === "string" &&
-        typeof item.description === "string" &&
-        typeof item.image === "string"
-    );
-  } catch {
-    return defaultCategories;
-  }
-}
-
-export function saveCategories(
-  categories: Category[]
-): void {
-  localStorage.setItem(
-    CATEGORY_STORAGE_KEY,
-    JSON.stringify(categories)
-  );
-
-  window.dispatchEvent(
-    new Event("radiwood-categories-updated")
-  );
-}
